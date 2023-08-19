@@ -24,7 +24,7 @@ section text {
     mov ax <- main.total128
     mov dx <- ax
 
-    both of these will throw, since a register can only hold 32 bits
+    both of these will throw, since a register can only hold 32 bits **in a 32-bit environnement
     you should use this instead:
     ];
 
