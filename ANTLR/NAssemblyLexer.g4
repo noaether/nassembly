@@ -36,7 +36,17 @@ WHILE: 'while';
 IDENTIFIER: [a-zA-Z][a-zA-Z0-9_]*;
 
 HEX_NUMBER: '0x' [0-9a-fA-F]+;
+HEX_STRING: 'hex' [0-9a-fA-F]+;
+
 BIN_NUMBER: '0b' [0-1]+;
+BIN_STRING: 'bin' [0-1]+;
+
+OCT_NUMBER: '0o' [0-7]+;
+OCT_STRING: 'oct' [0-7]+;
+
+DEC_NUMBER: '0d' [0-9]+;
+DEC_STRING: 'dec' [0-9]+;
+
 FLOAT_NUMBER: [0-9]+ '.' [0-9]+;
 INTEGER: [0-9]+;
 

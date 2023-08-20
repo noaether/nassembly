@@ -30,15 +30,24 @@ execute:
 	| IDENTIFIER IDENTIFIER ASSIGN_RIGHTTOLEFT value;
 
 value:
-	HEX_NUMBER
-	| FLOAT_NUMBER
-	| BIN_NUMBER
+  | number
 	| functioncall
 	| IDENTIFIER
 	| STRING_VALUE
 	| CHAR_VALUE
 	| OPEN_PAREN value CLOSE_PAREN
-	| value operator value;
+	| number operator number;
+
+number:
+  HEX_NUMBER
+  | DEC_NUMBER
+  | BIN_NUMBER
+  | OCT_NUMBER
+  | FLOAT_NUMBER
+  | HEX_STRING
+  | DEC_STRING
+  | BIN_STRING
+  | OCT_STRING;
 
 operator:
 	PLUS
