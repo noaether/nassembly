@@ -18,7 +18,9 @@ section text {
 }
 ```
 
-## Variables and data
+## Data Section
+
+### Variables and data
 
 See [#functions](#functions) for more information about values that depend on functions. \
 See [#datatypes](#data-types) for more information about datatypes.
@@ -33,22 +35,25 @@ uint32 : d = function(0x12345678, 0x87654321) ; Function call with arguments
 uint32 : e = (0x10101010 + 0x01010101) ; Mathematical operations should be placed in parentheses
 ```
 
-## Data types
+### Data types
 
 ### Integer types
 
 - `uint8` - Unsigned 8-bit integer
 - `uint16` - Unsigned 16-bit integer
 - `uint32` - Unsigned 32-bit integer
-- `uint64` - Unsigned 64-bit integer
+- `uint64` - Unsigned 64-bit integer`
+- `uint` -> `uint32`
 
 - `int8` - Signed 8-bit integer
 - `int16` - Signed 16-bit integer
 - `int32` - Signed 32-bit integer
 - `int64` - Signed 64-bit integer
+- `int` -> `int32`
 
 - `float32` - 32-bit floating point number
 - `float64` - 64-bit floating point number
+- `float`-> `float64`
 
 - `long` - 32-bit integer on 32-bit systems, 64-bit integer on 64-bit systems
 - `ulong` - 32-bit unsigned integer on 32-bit systems, 64-bit unsigned integer on 64-bit systems
@@ -73,7 +78,13 @@ uint32 : e = (0x10101010 + 0x01010101) ; Mathematical operations should be place
 - `void` - No type, used for functions that do not return a value
 - `null` - Null pointer
 
-## Functions
+## Text Section
+
+### Declarations
+
+### Main
+
+### Functions
 
 In a function declaration, the first two variables that are not initialized are the arguments. Even if possible, you should not declare variables with values before having declared all the arguments.
 
@@ -107,7 +118,7 @@ Don't forget to put a space after the semicolon for the single line comments. Yo
 
 ```nass
 ; Single line comment
-;\[ Single line comment (Lbracket escaped)
+;\[ Single line comment (Lbracket escaped) *Dumb but possible)
 ;[ Single line comment ]; *NOT A COMMENT HERE*
 
 ;[
@@ -116,3 +127,5 @@ Don't forget to put a space after the semicolon for the single line comments. Yo
   comment
 ];
 ```
+
+## Additionnal Information
