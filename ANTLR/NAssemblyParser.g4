@@ -23,8 +23,9 @@ output: types | types COMMA;
 
 statement: data | execute;
 
-data: types COLON IDENTIFIER EQUALS value
-    | types OPEN_BRACKET value CLOSE_BRACKET COLON IDENTIFIER EQUALS array
+data:
+	types COLON IDENTIFIER EQUALS value
+	| types OPEN_BRACKET value CLOSE_BRACKET COLON IDENTIFIER EQUALS array
 	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER EQUALS array
 	| argscatcher
 	| edit;
@@ -33,15 +34,23 @@ edit: IDENTIFIER EQUALS value;
 
 array: OPEN_BRACKET args* CLOSE_BRACKET;
 
-execute:
-	IDENTIFIER IDENTIFIER ASSIGN_LEFTTORIGHT value
-	| IDENTIFIER IDENTIFIER ASSIGN_RIGHTTOLEFT value
-	| WHILE OPEN_PAREN value operator value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+execute: mov | whileloop | ifloop;
 
-value: number
+mov:
+	IDENTIFIER IDENTIFIER ASSIGN_LEFTTORIGHT value
+	| IDENTIFIER IDENTIFIER ASSIGN_RIGHTTOLEFT value;
+
+whileloop:
+	WHILE OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+
+ifloop :
+	IF OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+
+value:
+	number
 	| functioncall
 	| functionvalue
-	| cast 
+	| cast
 	| IDENTIFIER OPEN_BRACKET value CLOSE_BRACKET
 	| IDENTIFIER
 	| STRING_VALUE
@@ -52,16 +61,16 @@ value: number
 	| value bytevalue;
 
 number:
-  HEX_NUMBER
-  | DEC_NUMBER
-  | BIN_NUMBER
-  | OCT_NUMBER
-  | FLOAT_NUMBER
-  | HEX_STRING
-  | DEC_STRING
-  | BIN_STRING
-  | OCT_STRING
-  | INTEGER;
+	HEX_NUMBER
+	| DEC_NUMBER
+	| BIN_NUMBER
+	| OCT_NUMBER
+	| FLOAT_NUMBER
+	| HEX_STRING
+	| DEC_STRING
+	| BIN_STRING
+	| OCT_STRING
+	| INTEGER;
 
 operator:
 	PLUS
@@ -78,37 +87,33 @@ operator:
 
 args: value | value COMMA;
 
-argscatcher: types COLON value
-           | types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER;
+argscatcher:
+	types COLON value
+	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER;
 
 cast: OPEN_PAREN types CLOSE_PAREN value;
 
-functionvalue: IDENTIFIER PERIOD IDENTIFIER
-             | IDENTIFIER PERIOD functionvalue;
+functionvalue:
+	IDENTIFIER PERIOD IDENTIFIER
+	| IDENTIFIER PERIOD functionvalue;
 
 functioncall:
 	IDENTIFIER OPEN_PAREN args* CLOSE_PAREN
 	| IDENTIFIER OPEN_PAREN CLOSE_PAREN;
 
-bytevalue:
-	OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
+bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
 
-types: uintegers | integers | floats | STRING | CHAR | VOID;
+types:
+	uintegers
+	| integers
+	| floats
+	| STRING
+	| CHAR
+	| VOID
+	| MEOW;
 
-uintegers:
-	UINT8
-	| UINT16
-	| UINT32
-	| UINT64
-	| UINT128;
+uintegers: UINT8 | UINT16 | UINT32 | UINT64 | UINT128;
 
-integers:
-	INT8
-	| INT16
-	| INT32
-	| INT64
-	| INT128;
+integers: INT8 | INT16 | INT32 | INT64 | INT128;
 
-floats:
-	FLOAT32
-	| FLOAT64;
+floats: FLOAT32 | FLOAT64;
