@@ -13,13 +13,18 @@ block:
 	| OPEN_CURLY function* CLOSE_CURLY	# textBlock;
 
 function:
-	(GLOBAL IDENTIFIER)+
-	| (IDENTIFIER OPEN_CURLY statement* CLOSE_CURLY)+
-	| IDENTIFIER input* ASSIGN_LEFTTORIGHT output* OPEN_CURLY statement* RETURN value CLOSE_CURLY
-	| IDENTIFIER input* ASSIGN_LEFTTORIGHT VOID OPEN_CURLY statement* CLOSE_CURLY;
+	(GLOBAL fxname)+												#mainLabel // mainLabel->IDENTIFIER = mainFunction->IDENTIFIER
+	| (fxname OPEN_CURLY statement* CLOSE_CURLY)+					#mainFunction
+	| fxname fxio OPEN_CURLY statement* RETURN value CLOSE_CURLY	#returnFunction
+	| fxname fxvoid OPEN_CURLY statement* CLOSE_CURLY				#noReturnFunction;
 
-input: types | types COMMA | types OPEN_BRACKET CLOSE_BRACKET;
-output: types | types COMMA;
+fxname: IDENTIFIER;
+fxio: fxin* ASSIGN_LEFTTORIGHT fxout*	# inputOutput;
+fxvoid: fxin* ASSIGN_LEFTTORIGHT VOID	# inputNoOut;
+
+
+fxin: types | types COMMA;
+fxout: types | types COMMA;
 
 statement: data | execute;
 
@@ -54,7 +59,7 @@ ifloop:
 	IF OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
 forloop:
-	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit;
+	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit OPEN_CURLY statement* CLOSE_CURLY;
 
 fordeclaration: num_types COLON IDENTIFIER EQUALS value;
 forcomparison: value;
@@ -102,7 +107,7 @@ functioncall:
 
 bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
 
-types: num_types | STRING | CHAR | VOID | MEOW;
+types: num_types | STRING | CHAR | VOID | MEOW | types OPEN_BRACKET CLOSE_BRACKET;
 
 num_types: uintegers | integers | floats | longs;
 
