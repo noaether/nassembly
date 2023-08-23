@@ -5,6 +5,7 @@ GLOBAL: 'global';
 
 WHILE: 'while';
 IF: 'if';
+FOR: 'for';
 
 // TYPES
 UINT8: 'uint8';

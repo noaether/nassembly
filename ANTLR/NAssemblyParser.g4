@@ -44,7 +44,7 @@ whileloop:
 	WHILE OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
 ifloop :
-	IF OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+	IF OPEN_PAREN value comparison value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
 value:
 	number
@@ -77,13 +77,7 @@ operator:
 	| MINUS
 	| MULTIPLY
 	| DIVIDE
-	| MODULO
-	| EQUALS
-	| NOTEQUALS
-	| LESS
-	| GREATER
-	| LESSEQUALS
-	| GREATEREQUALS;
+	| MODULO;
 
 args: value | value COMMA;
 
@@ -102,6 +96,14 @@ functioncall:
 	| IDENTIFIER OPEN_PAREN CLOSE_PAREN;
 
 bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
+
+comparison:
+	EQUALS
+	| NOTEQUALS
+	| GREATER
+	| LESS
+	| GREATEREQUALS
+	| LESSEQUALS;
 
 types:
 	uintegers
