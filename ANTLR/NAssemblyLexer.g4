@@ -1,24 +1,6 @@
 lexer grammar NAssemblyLexer;
 
-
-@lexer::members {
-  boolean ahead(String text) {
-    for (int i = 0; i < text.length(); i++) {
-      if (text.charAt(i) != _input.LA(i + 1)) {
-        return false;
-      }
-    }
-    return true;
-  }
-}
-
-SPECIAL_COMMENT
- : ';[' ( {!ahead("];")}? ~[\r\n] )*
- ;
-
-COMMENT
- : ';' ( ~[?\r\n] ~[\r\n]* )?
- ;
+COMMENT: ';' .*? '\n' -> channel(HIDDEN);
 
 SECTION: 'section';
 GLOBAL: 'global';

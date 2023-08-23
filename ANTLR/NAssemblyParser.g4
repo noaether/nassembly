@@ -13,15 +13,14 @@ block:
 	| OPEN_CURLY function* CLOSE_CURLY	# textBlock;
 
 function:
-	(GLOBAL fxname)+												#mainLabel // mainLabel->IDENTIFIER = mainFunction->IDENTIFIER
-	| (fxname OPEN_CURLY statement* CLOSE_CURLY)+					#mainFunction
-	| fxname fxio OPEN_CURLY statement* RETURN value CLOSE_CURLY	#returnFunction
-	| fxname fxvoid OPEN_CURLY statement* CLOSE_CURLY				#noReturnFunction;
+	(GLOBAL fxname)+												# mainLabel // mainLabel->IDENTIFIER = mainFunction->IDENTIFIER
+	| (fxname OPEN_CURLY statement* CLOSE_CURLY)+					# mainFunction
+	| fxname fxio OPEN_CURLY statement* RETURN value CLOSE_CURLY	# returnFunction
+	| fxname fxvoid OPEN_CURLY statement* CLOSE_CURLY				# noReturnFunction;
 
 fxname: IDENTIFIER;
-fxio: fxin* ASSIGN_LEFTTORIGHT fxout*	# inputOutput;
-fxvoid: fxin* ASSIGN_LEFTTORIGHT VOID	# inputNoOut;
-
+fxio: fxin* ASSIGN_LEFTTORIGHT fxout* # inputOutput;
+fxvoid: fxin* ASSIGN_LEFTTORIGHT VOID # inputNoOut;
 
 fxin: types | types COMMA;
 fxout: types | types COMMA;
@@ -34,15 +33,17 @@ declaration:
 	types COLON IDENTIFIER								# simpleArgscatchVar
 	| types COLON IDENTIFIER EQUALS value				# simpleVar
 	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER	# arrayArgscatchVar
-	| types OPEN_BRACKET value? CLOSE_BRACKET COLON IDENTIFIER EQUALS OPEN_BRACKET (
-		value
-		| value COMMA
-	)* CLOSE_BRACKET # arrayVar;
+	| types OPEN_BRACKET value? CLOSE_BRACKET COLON IDENTIFIER EQUALS (
+		(OPEN_BRACKET (value | value COMMA)* CLOSE_BRACKET)
+		| (value)
+	) # arrayVar;
 
 edit:
 	IDENTIFIER EQUALS value
 	| IDENTIFIER PLUS PLUS
-	| IDENTIFIER MINUS MINUS;
+	| IDENTIFIER MINUS MINUS
+	| IDENTIFIER (PLUS EQUALS | EQUALS PLUS) value
+	| IDENTIFIER (MINUS EQUALS | EQUALS MINUS) value;
 
 array: OPEN_BRACKET args* CLOSE_BRACKET;
 
@@ -59,7 +60,8 @@ ifloop:
 	IF OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
 forloop:
-	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit OPEN_CURLY statement* CLOSE_CURLY;
+	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit OPEN_CURLY statement*
+		CLOSE_CURLY;
 
 fordeclaration: num_types COLON IDENTIFIER EQUALS value;
 forcomparison: value;
@@ -107,7 +109,13 @@ functioncall:
 
 bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
 
-types: num_types | STRING | CHAR | VOID | MEOW | types OPEN_BRACKET CLOSE_BRACKET;
+types:
+	num_types
+	| STRING
+	| CHAR
+	| VOID
+	| MEOW
+	| types OPEN_BRACKET CLOSE_BRACKET;
 
 num_types: uintegers | integers | floats | longs;
 
