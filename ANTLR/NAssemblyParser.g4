@@ -9,12 +9,12 @@ program: section*;
 section: SECTION IDENTIFIER block;
 
 block:
-	OPEN_CURLY data* CLOSE_CURLY
-	| OPEN_CURLY function* CLOSE_CURLY;
+	OPEN_CURLY declaration* CLOSE_CURLY	# dataBlock
+	| OPEN_CURLY function* CLOSE_CURLY	# textBlock;
 
 function:
-	GLOBAL IDENTIFIER
-	| IDENTIFIER OPEN_CURLY statement* CLOSE_CURLY
+	(GLOBAL IDENTIFIER)+
+	| (IDENTIFIER OPEN_CURLY statement* CLOSE_CURLY)+
 	| IDENTIFIER input* ASSIGN_LEFTTORIGHT output* OPEN_CURLY statement* RETURN value CLOSE_CURLY
 	| IDENTIFIER input* ASSIGN_LEFTTORIGHT VOID OPEN_CURLY statement* CLOSE_CURLY;
 
@@ -23,17 +23,19 @@ output: types | types COMMA;
 
 statement: data | execute;
 
-data:
-	declaration
-	| argscatcher
-	| edit;
+data: declaration | edit;
 
-declaration: 
-	types COLON IDENTIFIER EQUALS value
-	| types OPEN_BRACKET value CLOSE_BRACKET COLON IDENTIFIER EQUALS array
-	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER EQUALS array;
+declaration:
+	types COLON IDENTIFIER								# simpleArgscatchVar
+	| types COLON IDENTIFIER EQUALS value				# simpleVar
+	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER	# arrayArgscatchVar
+	| types OPEN_BRACKET value? CLOSE_BRACKET COLON IDENTIFIER EQUALS OPEN_BRACKET (
+		value
+		| value COMMA
+	)* CLOSE_BRACKET # arrayVar;
 
-edit: IDENTIFIER EQUALS value
+edit:
+	IDENTIFIER EQUALS value
 	| IDENTIFIER PLUS PLUS
 	| IDENTIFIER MINUS MINUS;
 
@@ -42,66 +44,57 @@ array: OPEN_BRACKET args* CLOSE_BRACKET;
 execute: mov | whileloop | ifloop;
 
 mov:
-	IDENTIFIER IDENTIFIER ASSIGN_LEFTTORIGHT value
-	| IDENTIFIER IDENTIFIER ASSIGN_RIGHTTOLEFT value;
+	MOV IDENTIFIER ASSIGN_LEFTTORIGHT value
+	| MOV IDENTIFIER ASSIGN_RIGHTTOLEFT value;
 
 whileloop:
 	WHILE OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
-ifloop :
-	IF OPEN_PAREN value comparison value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+ifloop:
+	IF OPEN_PAREN value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
 
-forloop :
+forloop:
 	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit;
 
 fordeclaration: num_types COLON IDENTIFIER EQUALS value;
-forcomparison: IDENTIFIER comparison_operator value;
+forcomparison: value;
 foredit: edit;
 
-value:
-	number
-	| functioncall
-	| functionvalue
-	| cast
-	| IDENTIFIER OPEN_BRACKET value CLOSE_BRACKET
-	| IDENTIFIER
-	| STRING_VALUE
-	| CHAR_VALUE
-	| OPEN_PAREN value CLOSE_PAREN
-	| number operator number
-	| IDENTIFIER operator value
-	| value bytevalue;
+value: // Returns a value
+	functioncall														# calledFunctionValue
+	| functionvalue														# functionValue
+	| value bytevalue													# byteValue
+	| <assoc = right>value POWER value									# powValue
+	| MINUS value														# unaryMinusValue
+	| NOT value															# notValue
+	| value op = (MULTIPLY | DIVIDE | MODULO) value						# multiplicationValue
+	| value op = (PLUS | MINUS) value									# additionValue
+	| value op = (LESS | GREATER | LESSEQUALS | GREATEREQUALS) value	# relationalValue
+	| value AND value													# andValue
+	| value OR value													# orValue
+	| atom																# atomValue;
 
-number:
-	HEX_NUMBER
-	| DEC_NUMBER
-	| BIN_NUMBER
-	| OCT_NUMBER
-	| FLOAT_NUMBER
-	| HEX_STRING
-	| DEC_STRING
-	| BIN_STRING
-	| OCT_STRING
-	| INTEGER;
-
-operator:
-	PLUS
-	| MINUS
-	| MULTIPLY
-	| DIVIDE
-	| MODULO;
+atom: // Value of something
+	OPEN_PAREN value CLOSE_PAREN					# parAtom
+	| (INTEGER | FLOAT_NUMBER)						# numberAtom
+	| (HEX_NUMBER | HEX_STRING)						# hexAtom
+	| (BIN_NUMBER | BIN_STRING)						# binAtom
+	| (OCT_NUMBER | OCT_STRING)						# octAtom
+	| (DEC_NUMBER | DEC_STRING)						# decAtom
+	| (TRUE | FALSE)								# boolAtom
+	| IDENTIFIER									# idAtom
+	| (STRING_VALUE | CHAR_VALUE)					# stringAtom
+	| NULL											# nullAtom
+	| cast											# castAtom
+	| IDENTIFIER OPEN_BRACKET value CLOSE_BRACKET	# arrayAtom;
 
 args: value | value COMMA;
-
-argscatcher:
-	types COLON value
-	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER;
 
 cast: OPEN_PAREN types CLOSE_PAREN value;
 
 functionvalue:
 	IDENTIFIER PERIOD IDENTIFIER
-	| IDENTIFIER PERIOD functionvalue;
+	| functionvalue PERIOD IDENTIFIER;
 
 functioncall:
 	IDENTIFIER OPEN_PAREN args* CLOSE_PAREN
@@ -109,20 +102,7 @@ functioncall:
 
 bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
 
-comparison_operator:
-	EQUALS
-	| NOTEQUALS
-	| GREATER
-	| LESS
-	| GREATEREQUALS
-	| LESSEQUALS;
-
-types:
-	num_types
-	| STRING
-	| CHAR
-	| VOID
-	| MEOW;
+types: num_types | STRING | CHAR | VOID | MEOW;
 
 num_types: uintegers | integers | floats | longs;
 

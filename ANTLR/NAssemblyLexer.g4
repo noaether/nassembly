@@ -1,11 +1,32 @@
 lexer grammar NAssemblyLexer;
 
+
+@lexer::members {
+  boolean ahead(String text) {
+    for (int i = 0; i < text.length(); i++) {
+      if (text.charAt(i) != _input.LA(i + 1)) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+SPECIAL_COMMENT
+ : ';[' ( {!ahead("];")}? ~[\r\n] )*
+ ;
+
+COMMENT
+ : ';' ( ~[?\r\n] ~[\r\n]* )?
+ ;
+
 SECTION: 'section';
 GLOBAL: 'global';
 
 WHILE: 'while';
 IF: 'if';
 FOR: 'for';
+MOV: 'mov';
 
 // TYPES
 UINT8: 'uint8';
@@ -32,6 +53,8 @@ STRING_VALUE: '"' .*? '"';
 CHAR_VALUE: '\'' . '\'';
 
 BOOL: 'bool';
+TRUE: 'true';
+FALSE: 'false';
 
 VOID: 'void';
 MEOW: 'meow';
@@ -67,11 +90,14 @@ MODULO: '%';
 POWER: '^';
 
 EQUALS: '=';
-NOTEQUALS: '!=';
+NOT: '!';
 GREATER: '>';
 LESS: '<';
 GREATEREQUALS: '>=';
 LESSEQUALS: '<=';
+
+AND: '&&';
+OR: '||';
 
 COLON: ':';
 COMMA: ',';
@@ -83,5 +109,4 @@ OPEN_PAREN: '(';
 CLOSE_PAREN: ')';
 OPEN_CURLY: '{';
 CLOSE_CURLY: '}';
-COMMENT: ';' .*? '\n' -> channel(HIDDEN);
 WS: [ \t\n\r]+ -> skip;
