@@ -24,13 +24,18 @@ output: types | types COMMA;
 statement: data | execute;
 
 data:
-	types COLON IDENTIFIER EQUALS value
-	| types OPEN_BRACKET value CLOSE_BRACKET COLON IDENTIFIER EQUALS array
-	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER EQUALS array
+	declaration
 	| argscatcher
 	| edit;
 
-edit: IDENTIFIER EQUALS value;
+declaration: 
+	types COLON IDENTIFIER EQUALS value
+	| types OPEN_BRACKET value CLOSE_BRACKET COLON IDENTIFIER EQUALS array
+	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER EQUALS array;
+
+edit: IDENTIFIER EQUALS value
+	| IDENTIFIER PLUS PLUS
+	| IDENTIFIER MINUS MINUS;
 
 array: OPEN_BRACKET args* CLOSE_BRACKET;
 
@@ -45,6 +50,13 @@ whileloop:
 
 ifloop :
 	IF OPEN_PAREN value comparison value CLOSE_PAREN OPEN_CURLY statement* CLOSE_CURLY;
+
+forloop :
+	FOR OPEN_PAREN fordeclaration COMMA forcomparison COMMA foredit;
+
+fordeclaration: num_types COLON IDENTIFIER EQUALS value;
+forcomparison: IDENTIFIER comparison_operator value;
+foredit: edit;
 
 value:
 	number
@@ -97,7 +109,7 @@ functioncall:
 
 bytevalue: OPEN_BRACKET INTEGER COLON INTEGER CLOSE_BRACKET;
 
-comparison:
+comparison_operator:
 	EQUALS
 	| NOTEQUALS
 	| GREATER
@@ -106,16 +118,15 @@ comparison:
 	| LESSEQUALS;
 
 types:
-	uintegers
-	| integers
-	| floats
+	num_types
 	| STRING
 	| CHAR
 	| VOID
 	| MEOW;
 
+num_types: uintegers | integers | floats | longs;
+
 uintegers: UINT8 | UINT16 | UINT32 | UINT64 | UINT128;
-
 integers: INT8 | INT16 | INT32 | INT64 | INT128;
-
 floats: FLOAT32 | FLOAT64;
+longs: LONG | ULONG;
