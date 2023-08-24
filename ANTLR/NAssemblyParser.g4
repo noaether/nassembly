@@ -13,10 +13,10 @@ block:
 	| OPEN_CURLY function* CLOSE_CURLY	# textBlock;
 
 function:
-	(GLOBAL fxname)+												# mainLabel // mainLabel->IDENTIFIER = mainFunction->IDENTIFIER
-	| (fxname OPEN_CURLY statement* CLOSE_CURLY)+					# mainFunction
-	| fxname fxio OPEN_CURLY statement* RETURN value CLOSE_CURLY	# returnFunction
-	| fxname fxvoid OPEN_CURLY statement* CLOSE_CURLY				# noReturnFunction;
+	(GLOBAL fxname)+																							# mainLabel // mainLabel->IDENTIFIER = mainFunction->IDENTIFIER
+	| (fxname OPEN_CURLY statement* CLOSE_CURLY)+									# mainFunction
+	| fxname fxio OPEN_CURLY argscatchers? statement* RETURN value CLOSE_CURLY	# returnFunction
+	| fxname fxvoid OPEN_CURLY argscatchers? statement* CLOSE_CURLY							# noReturnFunction;
 
 fxname: IDENTIFIER;
 fxio: fxin* ASSIGN_LEFTTORIGHT fxout* # inputOutput;
@@ -29,10 +29,12 @@ statement: data | execute;
 
 data: declaration | edit;
 
-declaration:
+argscatchers:
 	types COLON IDENTIFIER								# simpleArgscatchVar
-	| types COLON IDENTIFIER EQUALS value				# simpleVar
-	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER	# arrayArgscatchVar
+	| types OPEN_BRACKET CLOSE_BRACKET COLON IDENTIFIER	# arrayArgscatchVar;
+
+declaration:
+  types COLON IDENTIFIER EQUALS value				# simpleVar
 	| types OPEN_BRACKET value? CLOSE_BRACKET COLON IDENTIFIER EQUALS (
 		(OPEN_BRACKET (value | value COMMA)* CLOSE_BRACKET)
 		| (value)
@@ -68,31 +70,31 @@ forcomparison: value;
 foredit: edit;
 
 value: // Returns a value
-	functioncall														# calledFunctionValue
-	| functionvalue														# functionValue
-	| value bytevalue													# byteValue
-	| <assoc = right>value POWER value									# powValue
-	| MINUS value														# unaryMinusValue
-	| NOT value															# notValue
-	| value op = (MULTIPLY | DIVIDE | MODULO) value						# multiplicationValue
-	| value op = (PLUS | MINUS) value									# additionValue
-	| value op = (LESS | GREATER | LESSEQUALS | GREATEREQUALS) value	# relationalValue
-	| value AND value													# andValue
-	| value OR value													# orValue
-	| atom																# atomValue;
+	functioncall																										# calledFunctionValue
+	| functionvalue																									# functionValue
+	| value bytevalue																								# byteValue
+	| <assoc = right>value POWER value															# powValue
+	| MINUS value																										# unaryMinusValue
+	| NOT value																											# notValue
+	| value op = (MULTIPLY | DIVIDE | MODULO) value									# multiplicationValue
+	| value op = (PLUS | MINUS) value																# additionValue
+	| value op = (LESS | GREATER | LESSEQUALS | GREATEREQUALS) value# relationalValue
+	| value AND value																								# andValue
+	| value OR value																								# orValue
+	| cast value																										# castValue
+	| atom																													# atomValue;
 
 atom: // Value of something
-	OPEN_PAREN value CLOSE_PAREN					# parAtom
-	| (INTEGER | FLOAT_NUMBER)						# numberAtom
-	| (HEX_NUMBER | HEX_STRING)						# hexAtom
-	| (BIN_NUMBER | BIN_STRING)						# binAtom
-	| (OCT_NUMBER | OCT_STRING)						# octAtom
-	| (DEC_NUMBER | DEC_STRING)						# decAtom
-	| (TRUE | FALSE)								# boolAtom
-	| IDENTIFIER									# idAtom
-	| (STRING_VALUE | CHAR_VALUE)					# stringAtom
-	| NULL											# nullAtom
-	| cast											# castAtom
+	OPEN_PAREN value CLOSE_PAREN									# parAtom
+	| (INTEGER | FLOAT_NUMBER)										# numberAtom
+	| (HEX_NUMBER | HEX_STRING)										# hexAtom
+	| (BIN_NUMBER | BIN_STRING)										# binAtom
+	| (OCT_NUMBER | OCT_STRING)										# octAtom
+	| (DEC_NUMBER | DEC_STRING)										# decAtom
+	| (TRUE | FALSE)															# boolAtom
+	| IDENTIFIER																	# idAtom
+	| (STRING_VALUE | CHAR_VALUE)									# stringAtom
+	| NULL																				# nullAtom
 	| IDENTIFIER OPEN_BRACKET value CLOSE_BRACKET	# arrayAtom;
 
 args: value | value COMMA;
