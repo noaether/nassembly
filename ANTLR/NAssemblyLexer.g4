@@ -9,6 +9,7 @@ WHILE: 'while';
 IF: 'if';
 FOR: 'for';
 MOV: 'mov';
+CPY: 'cpy';
 
 // TYPES
 UINT8: 'uint8';
