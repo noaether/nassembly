@@ -13,20 +13,20 @@ $ pip install antlr4-tools
 If needed, ANTLR will download it's required libraries 
 
 ```bash
-antlr4
+$ antlr4
 ```
 
 ## Usage
 
 ```bash
 # run antlr
-antlr4 -lib ./ANTLR/ -o <file output>
+$ antlr4 -lib ./ANTLR/ -o <file output>
 
 # returns a text tree view
-antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -tree
+$ antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -tree
 
 # returns a visual tree view 
-antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -gui
+$ antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -gui
 ```
 
 ## Contributing
