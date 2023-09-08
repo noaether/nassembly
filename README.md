@@ -45,4 +45,21 @@ Refer to [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CON
 
 ## License
 
-[BSD 3-Clause](LICENSE)
+This project - like all of my other projects - uses the [BSD 3-Clause](LICENSE). \
+
+You can :
+- modify
+- commercialize
+- distribute
+- sublicense
+- place warranty
+
+You cannot : 
+- use my trademarks 
+- hold me liable 
+
+You must : 
+- Include MY Copyright
+- Incluse the same license [BSD 3-Clause](LICENSE)
+
+*i am not a lawyer, blah-blah-blah, get real advice and just be smart*
