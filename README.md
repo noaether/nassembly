@@ -31,8 +31,10 @@ $ antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -gui
 
 ## More Information
 
-Refer to [HOWTO.md](HOWTO.md) for information about how to actually make something using *nsmb*. \
-Refer to [PHILOSOPHY.md](PHILOSOPHY.md) for my rhetoric and reasoning under ***why*** I made *nsmb* into a thing.
+Refer to :
+- [HOWTO.md](HOWTO.md) for information about how to actually make something using *nsmb*. \
+- [PHILOSOPHY.md](PHILOSOPHY.md) for my rhetoric and reasoning under ***why*** I made *nsmb* into a thing.
+- Everything under [examples](examples/) for basic programs that outline the functionment of *nsmb*.
 
 ## Contributing
 
