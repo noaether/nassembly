@@ -4,7 +4,7 @@ nAssembly is a high-level flavoured version of x86_64 assembly, designed for the
 
 ## Installation
 
-Use [Antlr Command Line Tools](https://github.com/antlr/antlr4-tools) to parse/lex nsmb code.
+Use [Antlr Command Line Tools](https://github.com/antlr/antlr4-tools) to parse/lex *nsmb* code.
 
 ```bash
 $ pip install antlr4-tools
@@ -28,6 +28,11 @@ $ antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -tree
 # returns a visual tree view 
 $ antlr4-parse ANTLR/NAssemblyParser.g4 <start rule> -gui
 ```
+
+## More Information
+
+Refer to [HOWTO.md](HOWTO.md) for information about how to actually make something using *nsmb*. \
+Refer to [PHILOSOPHY.md](PHILOSOPHY.md) for my rhetoric and reasoning under ***why*** I made *nsmb* into a thing.
 
 ## Contributing
 
