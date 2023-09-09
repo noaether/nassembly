@@ -45,7 +45,7 @@ Refer to [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CON
 
 ## License
 
-This project - like all of my other projects - uses the [BSD 3-Clause](LICENSE). \
+This project - like all of my other projects - uses the [BSD 3-Clause](LICENSE).
 
 You can :
 - modify
