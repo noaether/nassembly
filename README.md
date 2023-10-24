@@ -1,6 +1,6 @@
 # nassembly
 
-nAssembly is a high-level flavoured version of x86_64 assembly, designed for the naOS Operating System
+nAssembly is a high-level flavoured version of Intel Assembly, designed for the naOS Operating System
 
 ## Installation
 
